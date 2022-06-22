@@ -48,6 +48,7 @@ from PIL import Image
 # Opens a file to be turned black.
 def black(imgName):
     try:
+        validateFormat(imgName)
         img = Image.open(imgName, "r")
         makeItBlack(img)
     except FileNotFoundError:
@@ -77,6 +78,7 @@ def makeItBlack(img):
 # Opens an image to be inspected.
 def inspect(imgName):
     try: 
+        validateFormat(imgName)
         img = Image.open(imgName, "r")
         inspectImage(img)
     except FileNotFoundError:
@@ -105,6 +107,7 @@ def inspectImage(img):
 # Formats the image containing the message to be used by the app.
 def flattenCode(imgName):
     try: 
+        validateFormat(imgName)
         img = Image.open(imgName, "r")
         flattenCodeImage(img)
     except FileNotFoundError:
@@ -133,6 +136,7 @@ def flattenCodeImage(img):
 # Formats the image where the message will be hidden to be used by the app.
 def flatten(imgName):
     try: 
+        validateFormat(imgName)
         img = Image.open(imgName, "r")
         flattenImage(img)
     except FileNotFoundError:
@@ -166,11 +170,11 @@ def flattenImage(img):
     newImg.save("flat_"+img.filename)
 
 # Opens both images to encode the message.
-def encode(coded, img):
+def encode(coded, imgName):
     codedImg = Image.open(coded)
-    image = Image.open(img)
+    img = Image.open(imgName)
 
-    encodeImages(codedImg, image)
+    encodeImages(codedImg, img)
 
 # Encodes the message inside the other image.
 def encodeImages(coded, img):
@@ -197,14 +201,15 @@ def encodeImages(coded, img):
     newImg.save("encoded_" + img.filename.split("_")[1])
 
 # Opens an image with an encoded message to be decoded.
-def decode(img):
+def decode(imgName):
     try:
-        i = Image.open(img)
+        validateFormat(imgName)
+        img = Image.open(imgName)
 
         # Asks the user how do they want their decoded image to look like.
         mode = input("Would you like your message to be released on top of the original image (T) or" + " on top of a black background (B)?\n")
-        if(mode=="B" or mode=="T"):
-            decodeImage(i, mode)
+        if(mode.lower()=="b" or mode.lower()=="t"):
+            decodeImage(img, mode)
         else:
             # Lets the user know the selected mode is not valid.
             print("Invalid mode.")
@@ -235,12 +240,25 @@ def decodeImage(img, mode):
                 newImg.putpixel((x,y), (255, 0, 0, 255))
             else:
                 # If the mode is "B", even pixels are turned black.
-                if(mode=="B"):
+                if(mode.lower()=="b"):
                     newImg.putpixel((x,y), (0, 0, 0, 255))
 
     # Saves the image and shows it to the user.
     newImg.show()
     newImg.save("decoded_" + img.filename)
+
+# Validates that the files provided are .png images.
+def validateFormat(img):
+    imgComponents = img.split(".")
+
+    if(len(imgComponents) == 2):
+        if(imgComponents[1].lower() != "png"):
+            print("Invalid file format.")
+            exit()
+    else:
+        print("Invalid file format.")
+        exit()
+    
 
 def main():
     # Ask the user what they want to do.

@@ -174,6 +174,10 @@ def encode(coded, imgName):
     codedImg = Image.open(coded)
     img = Image.open(imgName)
 
+    if(img.size != codedImg.size):
+        print("The images are not the same size.")
+        exit()
+
     encodeImages(codedImg, img)
 
 # Encodes the message inside the other image.

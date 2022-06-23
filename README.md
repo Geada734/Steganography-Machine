@@ -5,7 +5,7 @@ Magical stegonography machine usage:
 This script encodes a message contained in an image inside
 another image using the PIL libary for Python.  
  
-All submitted images need to be PNGs.
+All submitted images need to be multilayer (for now) PNGs.
 
 Functions:
 

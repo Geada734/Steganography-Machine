@@ -1,8 +1,8 @@
 # Magical stegonography machine usage:
 #
 # This script encodes a message contained in an image inside
-# another image using the PIL libary for Python.  
-# 
+# another image using the PIL libary for Python.
+#
 # All submitted images need to be PNGs.
 #
 # Functions:
@@ -12,7 +12,7 @@
 # Submit two PNG images of the same size, both images most be PNGs.
 # One of the images must be all-black (#000) and have the message written in
 # bright red letters (#F00 recommended). This message is going to be encoded
-# in the submitted picture. 
+# in the submitted picture.
 #
 # A new file called "encoded_x.png" (where "x" is the original filename) will
 # be saved in the current directory.
@@ -37,16 +37,16 @@
 # Provide an image to receive an all black image of the same size. This makes
 # it easier to create the image that contains the message in bright red letters.
 #
-# A new file called "black_x.png" (where "x" is the original filename) will be 
+# A new file called "black_x.png" (where "x" is the original filename) will be
 # saved in the current directory.
-# 
+#
 # -Geada734
 
-# This script runs on PIL.
+'''This script runs on PIL.'''
 from PIL import Image
 
-# Opens a file to be turned black.
 def black(imgName):
+    '''Opens a file to be turned black.'''
     try:
         validateFormat(imgName)
         img = Image.open(imgName, "r")
@@ -56,8 +56,8 @@ def black(imgName):
         print("File not found.")
         exit()
 
-# Creates a black copy of an image.
 def makeItBlack(img):
+    '''Creates a black copy of an image.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -73,21 +73,22 @@ def makeItBlack(img):
 
     # Saves the image and shows it to the user.
     newImg.show()
-    newImg.save("black_" + img.filename)   
+    newImg.save("black_" + img.filename) 
 
-# Opens an image to be inspected.
 def inspect(imgName):
-    try: 
+    '''Opens an image to be inspected.'''
+    try:
         validateFormat(imgName)
         img = Image.open(imgName, "r")
         inspectImage(img)
+
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         exit()
 
-# Inspects the image.
 def inspectImage(img):
+    '''Inspects the image.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -97,26 +98,27 @@ def inspectImage(img):
     for x in range(0,w):
         for y in range(0,h):
             pix = img.getpixel((x,y))
-            
+
             if(pix[2]%2==1):
                 print(pix)
-    
+
     # Shows the image to the user.
     img.show()
 
-# Formats the image containing the message to be used by the app.
 def flattenCode(imgName):
-    try: 
+    '''Formats the image containing the message to be used by the app.'''
+    try:
         validateFormat(imgName)
         img = Image.open(imgName, "r")
         flattenCodeImage(img)
+
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         exit()
 
-# Makes the image's balcks extra black.
 def flattenCodeImage(img):
+    '''Makes the image's balcks extra black.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -130,12 +132,12 @@ def flattenCodeImage(img):
         for y in range(0,h):
             if(img.getpixel((x,y))[0]==0):
                 newImg.putpixel((x,y), (0,0,0,255))
-    
+
     newImg.save("flatCode_"+img.filename)
 
-# Formats the image where the message will be hidden to be used by the app.
 def flatten(imgName):
-    try: 
+    '''Formats the image where the message will be hidden to be used by the app.'''
+    try:
         validateFormat(imgName)
         img = Image.open(imgName, "r")
         flattenImage(img)
@@ -144,8 +146,8 @@ def flatten(imgName):
         print("File not found.")
         exit()
 
-# Makes sure the message can be encoded in the image.
 def flattenImage(img):
+    '''Makes sure the message can be encoded in the image.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -169,8 +171,8 @@ def flattenImage(img):
 
     newImg.save("flat_"+img.filename)
 
-# Opens both images to encode the message.
 def encode(coded, imgName):
+    '''Opens both images to encode the message.'''
     codedImg = Image.open(coded)
     img = Image.open(imgName)
 
@@ -180,8 +182,8 @@ def encode(coded, imgName):
 
     encodeImages(codedImg, img)
 
-# Encodes the message inside the other image.
 def encodeImages(coded, img):
+    '''Encodes the message inside the other image.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -204,8 +206,8 @@ def encodeImages(coded, img):
     newImg.show()
     newImg.save("encoded_" + img.filename.split("_")[1])
 
-# Opens an image with an encoded message to be decoded.
 def decode(imgName):
+    '''Opens an image with an encoded message to be decoded.'''
     try:
         validateFormat(imgName)
         img = Image.open(imgName)
@@ -224,8 +226,8 @@ def decode(imgName):
         print("File not found.")
         exit()
 
-# Decodes an image with an encoded message.
 def decodeImage(img, mode):
+    '''Decodes an image with an encoded message.'''
     x = 0
     y = 0
     w = img.size[0]
@@ -251,8 +253,8 @@ def decodeImage(img, mode):
     newImg.show()
     newImg.save("decoded_" + img.filename)
 
-# Validates that the files provided are .png images.
 def validateFormat(img):
+    '''Validates that the files provided are .png images.'''
     imgComponents = img.split(".")
 
     if(len(imgComponents) == 2):
@@ -262,11 +264,11 @@ def validateFormat(img):
     else:
         print("Invalid file format.")
         exit()
-    
 
 def main():
     # Ask the user what they want to do.
-    prompt = (input("Welcome to my awesome stenography machine!\n" + "Select one of the following:\n" +
+    prompt = (input("Welcome to my awesome stenography machine!\n" +
+    "Select one of the following:\n" +
     "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n"))
 
     if(prompt=="1"):
@@ -292,4 +294,4 @@ def main():
         print("Input a valid command, please.")
 
 if __name__ == "__main__":
-    main() 
+    main()

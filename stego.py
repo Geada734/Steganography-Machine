@@ -1,3 +1,4 @@
+'''This script runs on PIL.'''
 # Magical stegonography machine usage:
 #
 # This script encodes a message contained in an image inside
@@ -42,250 +43,251 @@
 #
 # -Geada734
 
-'''This script runs on PIL.'''
+import sys
 from PIL import Image
 
-def black(imgName):
+def black(img_name):
     '''Opens a file to be turned black.'''
     try:
-        validateFormat(imgName)
-        img = Image.open(imgName, "r")
-        makeItBlack(img)
+        validate_format(img_name)
+        img = Image.open(img_name, "r")
+        make_it_black(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
-        exit()
+        sys.exit()
 
-def makeItBlack(img):
+def make_it_black(img):
     '''Creates a black copy of an image.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Copy of the original image.
-    newImg = img.copy()
+    new_img = img.copy()
 
     # Iterates each pixel turning it black.
-    for x in range (0, w):
-        for y in range(0, h):
-            newImg.putpixel((x,y), (0, 0, 0, 255))
+    for pix_x in range (0, width):
+        for pix_y in range(0, height):
+            new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
     # Saves the image and shows it to the user.
-    newImg.show()
-    newImg.save("black_" + img.filename) 
+    new_img.show()
+    new_img.save("black_" + img.filename)
 
-def inspect(imgName):
+def inspect(img_name):
     '''Opens an image to be inspected.'''
     try:
-        validateFormat(imgName)
-        img = Image.open(imgName, "r")
-        inspectImage(img)
+        validate_format(img_name)
+        img = Image.open(img_name, "r")
+        inspect_image(img)
 
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
-        exit()
+        sys.exit()
 
-def inspectImage(img):
+def inspect_image(img):
     '''Inspects the image.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Iterates over each pixel printing its color.
-    for x in range(0,w):
-        for y in range(0,h):
-            pix = img.getpixel((x,y))
+    for pix_x in range(0, width):
+        for pix_y in range(0, height):
+            pix = img.getpixel((pix_x, pix_y))
 
-            if(pix[2]%2==1):
+            if pix[2]%2==1:
                 print(pix)
 
     # Shows the image to the user.
     img.show()
 
-def flattenCode(imgName):
+def flatten_code(img_name):
     '''Formats the image containing the message to be used by the app.'''
     try:
-        validateFormat(imgName)
-        img = Image.open(imgName, "r")
-        flattenCodeImage(img)
+        validate_format(img_name)
+        img = Image.open(img_name, "r")
+        flatten_code_image(img)
 
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
-        exit()
+        sys.exit()
 
-def flattenCodeImage(img):
+def flatten_code_image(img):
     '''Makes the image's balcks extra black.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Copy of the orginal image.
-    newImg = img.copy()
+    new_img = img.copy()
 
     # Iterates over each pixel to make the image usable by turning them black.
-    for x in range(0,w):
-        for y in range(0,h):
-            if(img.getpixel((x,y))[0]==0):
-                newImg.putpixel((x,y), (0,0,0,255))
+    for pix_x in range(0, width):
+        for pix_y in range(0, height):
+            if img.getpixel((pix_x,pix_y))[0]==0:
+                new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
-    newImg.save("flatCode_"+img.filename)
+    new_img.save("flatCode_"+img.filename)
 
-def flatten(imgName):
+def flatten(img_name):
     '''Formats the image where the message will be hidden to be used by the app.'''
     try:
-        validateFormat(imgName)
-        img = Image.open(imgName, "r")
-        flattenImage(img)
+        validate_format(img_name)
+        img = Image.open(img_name, "r")
+        flatten_image(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
-        exit()
+        sys.exit()
 
-def flattenImage(img):
+def flatten_image(img):
     '''Makes sure the message can be encoded in the image.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Copy of the original image.
-    newImg = img.copy()
+    new_img = img.copy()
 
     # Iterates over each pixel in the image to make their RGB value even.
-    for x in range(0,w):
-        for y in range(0,h):
-            pix = list(img.getpixel((x,y)))
+    for pix_x in range(0, width):
+        for pix_y in range(0, height):
+            pix = list(img.getpixel((pix_x, pix_y)))
             red = pix[0]
             green = pix[1]
             blue = pix[2]
 
             # Since blue is the "B" in "RGB", that's the value we are making even.
-            if(blue%2==1):
+            if blue%2==1:
                 blue = blue - 1
-                newImg.putpixel((x,y), (red, green, blue, 255))
+                new_img.putpixel((pix_x, pix_y), (red, green, blue, 255))
 
-    newImg.save("flat_"+img.filename)
+    new_img.save("flat_"+img.filename)
 
-def encode(coded, imgName):
+def encode(coded, img_name):
     '''Opens both images to encode the message.'''
-    codedImg = Image.open(coded)
-    img = Image.open(imgName)
+    coded_img = Image.open(coded)
+    img = Image.open(img_name)
 
-    if(img.size != codedImg.size):
+    if img.size != coded_img.size:
         print("The images are not the same size.")
-        exit()
+        sys.exit()
 
-    encodeImages(codedImg, img)
+    encode_images(coded_img, img)
 
-def encodeImages(coded, img):
+def encode_images(coded, img):
     '''Encodes the message inside the other image.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Copy of the original image.
-    newImg = img.copy()
+    new_img = img.copy()
 
     # Any red pixels on the black image are turned into odd pixels
     # on the original picture.
-    for x in range(0, w):
-        for y in range(0, h):
-            if(coded.getpixel((x,y))[0]>0):
-                pix = list(img.getpixel((x,y)))
+    for pix_x in range(0, width):
+        for pix_y in range(0, height):
+            if coded.getpixel((pix_x, pix_y))[0]>0:
+                pix = list(img.getpixel((pix_x, pix_y)))
                 pix[2] = pix[2] + 1
                 pix.append(255)
-                newImg.putpixel((x,y), tuple(pix))
+                new_img.putpixel((pix_x, pix_y), tuple(pix))
 
     # Saves the image and shows it to the user.
-    newImg.show()
-    newImg.save("encoded_" + img.filename.split("_")[1])
+    new_img.show()
+    new_img.save("encoded_" + img.filename.split("_")[1])
 
-def decode(imgName):
+def decode(img_name):
     '''Opens an image with an encoded message to be decoded.'''
     try:
-        validateFormat(imgName)
-        img = Image.open(imgName)
+        validate_format(img_name)
+        img = Image.open(img_name)
 
         # Asks the user how do they want their decoded image to look like.
-        mode = input("Would you like your message to be released on top of the original image (T) or" + " on top of a black background (B)?\n")
-        if(mode.lower()=="b" or mode.lower()=="t"):
-            decodeImage(img, mode)
+        mode = input("Would you like your message to be released on top of the original image (T)" +
+        " or on top of a black background (B)?\n")
+        if mode.lower()=="b" or mode.lower()=="t":
+            decode_image(img, mode)
         else:
             # Lets the user know the selected mode is not valid.
             print("Invalid mode.")
-            exit()
+            sys.exit()
 
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
-        exit()
+        sys.exit()
 
-def decodeImage(img, mode):
+def decode_image(img, mode):
     '''Decodes an image with an encoded message.'''
-    x = 0
-    y = 0
-    w = img.size[0]
-    h = img.size[1]
+    pix_x = 0
+    pix_y = 0
+    width = img.size[0]
+    height = img.size[1]
 
     # Copy of the original image.
-    newImg = img.copy()
+    new_img = img.copy()
 
     # Iterate the image to look for odd pixels.
-    for x in range(0,w):
-        for y in range(0,h):
-            pix = img.getpixel((x,y))
+    for pix_x in range(0, width):
+        for pix_y in range(0, height):
+            pix = img.getpixel((pix_x, pix_y))
 
-            if(pix[2]%2==1):
+            if pix[2]%2==1:
                 # Odd pixels are turned red.
-                newImg.putpixel((x,y), (255, 0, 0, 255))
+                new_img.putpixel((pix_x, pix_y), (255, 0, 0, 255))
             else:
                 # If the mode is "B", even pixels are turned black.
-                if(mode.lower()=="b"):
-                    newImg.putpixel((x,y), (0, 0, 0, 255))
+                if mode.lower()=="b":
+                    new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
     # Saves the image and shows it to the user.
-    newImg.show()
-    newImg.save("decoded_" + img.filename)
+    new_img.show()
+    new_img.save("decoded_" + img.filename)
 
-def validateFormat(img):
+def validate_format(img):
     '''Validates that the files provided are .png images.'''
-    imgComponents = img.split(".")
+    img_components = img.split(".")
 
-    if(len(imgComponents) == 2):
-        if(imgComponents[1].lower() != "png"):
+    if len(img_components) == 2:
+        if img_components[1].lower() != "png":
             print("Invalid file format.")
-            exit()
+            sys.exit()
     else:
         print("Invalid file format.")
-        exit()
+        sys.exit()
 
 def main():
-    # Ask the user what they want to do.
+    '''Main method'''
     prompt = (input("Welcome to my awesome stenography machine!\n" +
     "Select one of the following:\n" +
     "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n"))
 
-    if(prompt=="1"):
+    if prompt=="1":
         coded = input("Input the filename of the image containing your message:\n")
-        flattenCode(coded)
+        flatten_code(coded)
         img = input("Input the image you want to hide your message in:\n")
         flatten(img)
         encode("flatCode_" + coded, "flat_" + img)
         print("Your image has been encoded! The new filename is encoded_" + img + ".")
-    elif(prompt=="2"):
+    elif prompt=="2":
         coded = input("Input the image that has the hidden message:\n")
         decode(coded)
         print("Your image has been decoded! The new filename is decoded_" + coded + ".")
-    elif(prompt=="3"):
+    elif prompt=="3":
         img = input("Input the file to inspect:\n")
         inspect(img)
-    elif(prompt=="4"):
+    elif prompt=="4":
         img = input("Input the file you want to create a black copy from:\n")
         black(img)
         print("Your black image has been created! The new filename is black_" + img + ".")

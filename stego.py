@@ -183,10 +183,7 @@ def encode(coded, img_name):
 
     validate_multilayer(coded_img)
     validate_multilayer(img)
-
-    if img.size != coded_img.size:
-        print("The images are not the same size.")
-        sys.exit()
+    validate_image_sizes(coded_img, img)
 
     encode_images(coded_img, img)
 
@@ -194,8 +191,8 @@ def encode_images(coded, img):
     '''Encodes the message inside the other image.'''
     pix_x = 0
     pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
+    width = coded.size[0]
+    height = coded.size[1]
 
     # Copy of the original image.
     new_img = img.copy()
@@ -280,10 +277,24 @@ def validate_multilayer(img):
     pix0 = img.getpixel((0, 0))
 
     # Checks if the first pixel is a tuple.
-    if(type(pix0) is not tuple):
+    if type(pix0) is not tuple:
         # Lets the user know the image is not multi-layer.
         print("Image is not multi-layer")
         sys.exit()
+
+def validate_image_sizes(coded, img):
+    '''Validates that the image with the coded message is smaller than the template
+    image.
+    '''
+    coded_x = coded.size[0]
+    coded_y = coded.size[1]
+    img_x = img.size[0]
+    img_y = img.size[1]
+
+    if coded_x>img_x or coded_y>img_y:
+        print("Make sure the image that contains the message is smaller than the template.")
+        sys.exit()
+
 
 def main():
     '''Main method'''

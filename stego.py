@@ -277,7 +277,7 @@ def validate_multilayer(img):
     pix0 = img.getpixel((0, 0))
 
     # Checks if the first pixel is a tuple.
-    if type(pix0) is not tuple:
+    if not isinstance(pix0, tuple):
         # Lets the user know the image is not multi-layer.
         print("Image is not multi-layer")
         sys.exit()
@@ -294,7 +294,6 @@ def validate_image_sizes(coded, img):
     if coded_x>img_x or coded_y>img_y:
         print("Make sure the image that contains the message is smaller than the template.")
         sys.exit()
-
 
 def main():
     '''Main method'''

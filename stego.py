@@ -4,7 +4,7 @@
 # This script encodes a message contained in an image inside
 # another image using the PIL libary for Python.
 #
-# All submitted images need to be PNGs.
+# All submitted images need to be multi-layer PNGs.
 #
 # Functions:
 #
@@ -51,6 +51,7 @@ def black(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
+        validate_multilayer(img)
         make_it_black(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
@@ -81,6 +82,7 @@ def inspect(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
+        validate_multilayer(img)
         inspect_image(img)
 
     except FileNotFoundError:
@@ -111,6 +113,7 @@ def flatten_code(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
+        validate_multilayer(img)
         flatten_code_image(img)
 
     except FileNotFoundError:
@@ -141,6 +144,7 @@ def flatten(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
+        validate_multilayer(img)
         flatten_image(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
@@ -177,6 +181,9 @@ def encode(coded, img_name):
     coded_img = Image.open(coded)
     img = Image.open(img_name)
 
+    validate_multilayer(coded_img)
+    validate_multilayer(img)
+
     if img.size != coded_img.size:
         print("The images are not the same size.")
         sys.exit()
@@ -212,6 +219,7 @@ def decode(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name)
+        validate_multilayer(img)
 
         # Asks the user how do they want their decoded image to look like.
         mode = input("Would you like your message to be released on top of the original image (T)" +
@@ -265,6 +273,16 @@ def validate_format(img):
             sys.exit()
     else:
         print("Invalid file format.")
+        sys.exit()
+
+def validate_multilayer(img):
+    '''Validates that the file is a multilayer .png image.'''
+    pix0 = img.getpixel((0, 0))
+
+    # Checks if the first pixel is a tuple.
+    if(type(pix0) is not tuple):
+        # Lets the user know the image is not multi-layer.
+        print("Image is not multi-layer")
         sys.exit()
 
 def main():

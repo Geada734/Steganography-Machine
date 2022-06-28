@@ -204,7 +204,9 @@ def encode_images(coded, img):
             if coded.getpixel((pix_x, pix_y))[0]>0:
                 pix = list(img.getpixel((pix_x, pix_y)))
                 pix[2] = pix[2] + 1
-                pix.append(255)
+                if len(pix) == 3:
+                    pix.append(255)
+                    
                 new_img.putpixel((pix_x, pix_y), tuple(pix))
 
     # Saves the image and shows it to the user.

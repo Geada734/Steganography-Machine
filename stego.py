@@ -283,6 +283,10 @@ def validate_multilayer(img):
         # Lets the user know the image is not multi-layer.
         print("Image is not multi-layer")
         sys.exit()
+    elif len(pix0)<3:
+        print("Incorrect pixel model")
+        sys.exit()
+
 
 def validate_image_sizes(coded, img):
     '''Validates that the image with the coded message is smaller than the template

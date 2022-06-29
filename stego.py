@@ -77,6 +77,12 @@ def make_it_black(img):
     new_img.show()
     new_img.save("black_" + img.filename)
 
+def image_reader(img):
+    '''Generator that reads the whole image to be used in the inspect_image function'''
+    img_data = list(img.getdata())
+    for i in img_data:
+        yield i
+
 def inspect(img_name):
     '''Opens an image to be inspected.'''
     try:
@@ -84,7 +90,6 @@ def inspect(img_name):
         img = Image.open(img_name, "r")
         validate_multilayer(img)
         inspect_image(img)
-
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
@@ -92,20 +97,11 @@ def inspect(img_name):
 
 def inspect_image(img):
     '''Inspects the image.'''
-    pix_x = 0
-    pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
+    generator = image_reader(img)
 
-    # Iterates over each pixel printing its color.
-    for pix_x in range(0, width):
-        for pix_y in range(0, height):
-            pix = img.getpixel((pix_x, pix_y))
+    for i in generator:
+        print(i)
 
-            if pix[2]%2==1:
-                print(pix)
-
-    # Shows the image to the user.
     img.show()
 
 def flatten_code(img_name):
@@ -206,7 +202,7 @@ def encode_images(coded, img):
                 pix[2] = pix[2] + 1
                 if len(pix) == 3:
                     pix.append(255)
-                    
+
                 new_img.putpixel((pix_x, pix_y), tuple(pix))
 
     # Saves the image and shows it to the user.

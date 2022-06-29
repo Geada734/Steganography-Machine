@@ -332,8 +332,6 @@ def main():
         else:
             coded = input("Input the filename of the image containing your message:\n")
 
-        flatten_code(coded)
-
         img = ""
 
         if len(sys.argv)>3:
@@ -341,6 +339,7 @@ def main():
         else:
             img = input("Input the image you want to hide your message in:\n")
 
+        flatten_code(coded)
         flatten(img)
         encode("flatCode_" + coded, "flat_" + img)
         print("Your image has been encoded! The new filename is encoded_" + img + ".")

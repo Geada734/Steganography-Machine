@@ -377,9 +377,17 @@ def main():
         # Can't believe PIL won't differentiate between filename and path.
         simple_coded = get_path_and_name(coded)
         simple_img = get_path_and_name(img)
-        new_file_name = encode("flatCode_" + simple_coded[0], "flat_" + simple_img[0], simple_img[1])
-        print("Your image has been encoded at " + simple_img[1] +
-        "! The new filename is encoded_" + new_file_name + ".")
+        new_file_name = encode("flatCode_" + simple_coded[0], "flat_" +
+        simple_img[0], simple_img[1])
+
+        # Change the message on whether the file is stored at the same
+        # dir as the script or not.
+        if len(simple_img[1])>0:
+            print("Your image has been encoded at " + simple_img[1] +
+            "! The new filename is encoded_" + new_file_name + ".")
+        else:
+            print("Your image has been encoded! The new filename is encoded_" + new_file_name + ".")
+
     elif user_input=="2":
         coded = ""
 
@@ -390,8 +398,16 @@ def main():
             coded = input("Input the image that has the hidden message:\n")
 
         new_path_data = decode(coded)
-        print("Your image has been decoded at "+ new_path_data[1] +
-        "! The new filename is decoded_" + new_path_data[0]+ ".")
+
+        # Change the message on whether the file is stored at the same
+        # dir as the script or not.
+        if len(new_path_data[1])>0:
+            print("Your image has been decoded at "+ new_path_data[1] +
+            "! The new filename is decoded_" + new_path_data[0]+ ".")
+        else:
+            print("Your image has been decoded! The new filename is decoded_" +
+            new_path_data[0]+ ".")
+
     elif user_input=="3":
         img = ""
 
@@ -412,8 +428,15 @@ def main():
             img = input("Input the file you want to create a black copy from:\n")
 
         new_path_data = black(img)
-        print("Your black image has been created at " + new_path_data[1] +
-        "! The new filename is black_" + new_path_data[0] + ".")
+
+        # Change the message on whether the file is stored at the same
+        # dir as the script or not.
+        if len(new_path_data[1])>0:
+            print("Your black image has been created at " + new_path_data[1] +
+            "! The new filename is black_" + new_path_data[0] + ".")
+        else:
+            print("Your black image has been created at! The new filename is black_" + new_path_data[0] + ".")
+
     elif user_input=="5":
         sys.exit()
     else:

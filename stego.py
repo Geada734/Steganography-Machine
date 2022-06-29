@@ -44,6 +44,7 @@
 # -Geada734
 
 import sys
+import os
 from PIL import Image
 
 def get_path_and_name(filename):
@@ -230,6 +231,10 @@ def encode_images(coded, img, path):
     new_img.show()
     new_img.save(path + "encoded_" + img.filename.split("_")[1])
     new_img.filename = img.filename.split("_")[1]
+
+    # Remove the flat temporary images used for encoding.
+    os.remove(coded.filename)
+    os.remove(img.filename)
 
     return str(new_img.filename)
 

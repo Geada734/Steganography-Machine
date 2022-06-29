@@ -299,28 +299,41 @@ def validate_image_sizes(coded, img):
 
 def main():
     '''Main method'''
-    prompt = (input("Welcome to my awesome stenography machine!\n" +
-    "Select one of the following:\n" +
-    "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n"))
+    user_inp = ""
 
-    if prompt=="1":
+    if len(sys.argv)>1:
+        if sys.argv[1] == "5":
+            print("Input a valid command, please.")
+            sys.exit()
+
+        user_inp = sys.argv[1]
+    else:
+        prompt = (input("Welcome to my awesome stenography machine!\n" +
+        "Select one of the following:\n" +
+        "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n" +
+        "5.- Exit\n"))
+        user_inp = prompt
+
+    if user_inp=="1":
         coded = input("Input the filename of the image containing your message:\n")
         flatten_code(coded)
         img = input("Input the image you want to hide your message in:\n")
         flatten(img)
         encode("flatCode_" + coded, "flat_" + img)
         print("Your image has been encoded! The new filename is encoded_" + img + ".")
-    elif prompt=="2":
+    elif user_inp=="2":
         coded = input("Input the image that has the hidden message:\n")
         decode(coded)
         print("Your image has been decoded! The new filename is decoded_" + coded + ".")
-    elif prompt=="3":
+    elif user_inp=="3":
         img = input("Input the file to inspect:\n")
         inspect(img)
-    elif prompt=="4":
+    elif user_inp=="4":
         img = input("Input the file you want to create a black copy from:\n")
         black(img)
         print("Your black image has been created! The new filename is black_" + img + ".")
+    elif user_inp=="5":
+        sys.exit()
     else:
         # Lets the user know that's an invalid command.
         print("Input a valid command, please.")

@@ -46,13 +46,26 @@
 import sys
 from PIL import Image
 
+def get_path_and_name(filename):
+    '''Separates the filename from the path'''
+    path_list = filename.split("/")
+    name = path_list.pop()
+
+    path = ""
+
+    if len(path_list)>0:
+        path = "/".join(path_list) + "/"
+
+    return [name, path]
+
 def black(img_name):
     '''Opens a file to be turned black.'''
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
-        validate_multilayer(img)
-        make_it_black(img)
+        validate_image(img)
+
+        return make_it_black(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
@@ -74,8 +87,12 @@ def make_it_black(img):
             new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
     # Saves the image and shows it to the user.
+    new_path_data = get_path_and_name(img.filename)
+
     new_img.show()
-    new_img.save("black_" + img.filename)
+    new_img.save(new_path_data[1] + "black_" + new_path_data[0])
+
+    return new_path_data
 
 def image_reader(img):
     '''Generator that reads the whole image to be used in the inspect_image function'''
@@ -88,7 +105,7 @@ def inspect(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
-        validate_multilayer(img)
+        validate_image(img)
         inspect_image(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
@@ -109,7 +126,7 @@ def flatten_code(img_name):
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
-        validate_multilayer(img)
+        validate_image(img)
         flatten_code_image(img)
 
     except FileNotFoundError:
@@ -133,14 +150,16 @@ def flatten_code_image(img):
             if img.getpixel((pix_x,pix_y))[0]==0:
                 new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
-    new_img.save("flatCode_"+img.filename)
+    new_filename = get_path_and_name(img.filename)[0]
+
+    new_img.save("flatCode_"+new_filename)
 
 def flatten(img_name):
     '''Formats the image where the message will be hidden to be used by the app.'''
     try:
         validate_format(img_name)
         img = Image.open(img_name, "r")
-        validate_multilayer(img)
+        validate_image(img)
         flatten_image(img)
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
@@ -170,20 +189,22 @@ def flatten_image(img):
                 blue = blue - 1
                 new_img.putpixel((pix_x, pix_y), (red, green, blue, 255))
 
-    new_img.save("flat_"+img.filename)
+    new_filename = get_path_and_name(img.filename)[0]
 
-def encode(coded, img_name):
+    new_img.save("flat_"+new_filename)
+
+def encode(coded, img_name, path):
     '''Opens both images to encode the message.'''
     coded_img = Image.open(coded)
     img = Image.open(img_name)
 
-    validate_multilayer(coded_img)
-    validate_multilayer(img)
+    validate_image(coded_img)
+    validate_image(img)
     validate_image_sizes(coded_img, img)
 
-    encode_images(coded_img, img)
+    return encode_images(coded_img, img, path)
 
-def encode_images(coded, img):
+def encode_images(coded, img, path):
     '''Encodes the message inside the other image.'''
     pix_x = 0
     pix_y = 0
@@ -207,20 +228,23 @@ def encode_images(coded, img):
 
     # Saves the image and shows it to the user.
     new_img.show()
-    new_img.save("encoded_" + img.filename.split("_")[1])
+    new_img.save(path + "encoded_" + img.filename.split("_")[1])
+    new_img.filename = img.filename.split("_")[1]
+
+    return str(new_img.filename)
 
 def decode(img_name):
     '''Opens an image with an encoded message to be decoded.'''
     try:
         validate_format(img_name)
         img = Image.open(img_name)
-        validate_multilayer(img)
+        validate_image(img)
 
         # Asks the user how do they want their decoded image to look like.
         mode = input("Would you like your message to be released on top of the original image (T)" +
         " or on top of a black background (B)?\n")
         if mode.lower()=="b" or mode.lower()=="t":
-            decode_image(img, mode)
+            return decode_image(img, mode)
         else:
             # Lets the user know the selected mode is not valid.
             print("Invalid mode.")
@@ -254,9 +278,13 @@ def decode_image(img, mode):
                 if mode.lower()=="b":
                     new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
 
+    new_path_data = get_path_and_name(img.filename)
+
     # Saves the image and shows it to the user.
     new_img.show()
-    new_img.save("decoded_" + img.filename)
+    new_img.save(new_path_data[1]+"decoded_"+new_path_data[0])
+
+    return new_path_data
 
 def validate_format(img):
     '''Validates that the files provided are .png images.'''
@@ -270,9 +298,12 @@ def validate_format(img):
         print("Invalid file format.")
         sys.exit()
 
-def validate_multilayer(img):
+def validate_image(img):
     '''Validates that the file is a multilayer .png image.'''
     pix0 = img.getpixel((0, 0))
+
+    if not hasattr(img, "filename"):
+        print("The image object does not have a file name.")
 
     # Checks if the first pixel is a tuple.
     if not isinstance(pix0, tuple):
@@ -341,8 +372,14 @@ def main():
 
         flatten_code(coded)
         flatten(img)
-        encode("flatCode_" + coded, "flat_" + img)
-        print("Your image has been encoded! The new filename is encoded_" + img + ".")
+
+        # Simplifying the name and path of the images to flatten.
+        # Can't believe PIL won't differentiate between filename and path.
+        simple_coded = get_path_and_name(coded)
+        simple_img = get_path_and_name(img)
+        new_file_name = encode("flatCode_" + simple_coded[0], "flat_" + simple_img[0], simple_img[1])
+        print("Your image has been encoded at " + simple_img[1] +
+        "! The new filename is encoded_" + new_file_name + ".")
     elif user_input=="2":
         coded = ""
 
@@ -352,8 +389,9 @@ def main():
         else:
             coded = input("Input the image that has the hidden message:\n")
 
-        decode(coded)
-        print("Your image has been decoded! The new filename is decoded_" + coded + ".")
+        new_path_data = decode(coded)
+        print("Your image has been decoded at "+ new_path_data[1] +
+        "! The new filename is decoded_" + new_path_data[0]+ ".")
     elif user_input=="3":
         img = ""
 
@@ -373,8 +411,9 @@ def main():
         else:
             img = input("Input the file you want to create a black copy from:\n")
 
-        black(img)
-        print("Your black image has been created! The new filename is black_" + img + ".")
+        new_path_data = black(img)
+        print("Your black image has been created at " + new_path_data[1] +
+        "! The new filename is black_" + new_path_data[0] + ".")
     elif user_input=="5":
         sys.exit()
     else:

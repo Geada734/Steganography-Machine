@@ -299,40 +299,84 @@ def validate_image_sizes(coded, img):
 
 def main():
     '''Main method'''
-    user_inp = ""
+    user_input = ""
+    options = {
+        "encode": "1",
+        "decode": "2",
+        "inspect": "3",
+        "black": "4"
+    }
 
+    # Checks if there were any arguments when running the app.
     if len(sys.argv)>1:
-        if sys.argv[1] == "5":
+        try:
+            user_input = options[sys.argv[1].lower()]
+        except KeyError:
             print("Input a valid command, please.")
             sys.exit()
-
-        user_inp = sys.argv[1]
     else:
+        # Prompts the user for imput if not.
         prompt = (input("Welcome to my awesome stenography machine!\n" +
         "Select one of the following:\n" +
         "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n" +
         "5.- Exit\n"))
-        user_inp = prompt
+        user_input = prompt
 
-    if user_inp=="1":
-        coded = input("Input the filename of the image containing your message:\n")
+    # Acts on user input.
+    if user_input=="1":
+        coded = ""
+
+        # Checks for filenames in the input.
+        if len(sys.argv)>2:
+            coded = sys.argv[2]
+        else:
+            coded = input("Input the filename of the image containing your message:\n")
+
         flatten_code(coded)
-        img = input("Input the image you want to hide your message in:\n")
+
+        img = ""
+
+        if len(sys.argv)>3:
+            img = sys.argv[3]
+        else:
+            img = input("Input the image you want to hide your message in:\n")
+
         flatten(img)
         encode("flatCode_" + coded, "flat_" + img)
         print("Your image has been encoded! The new filename is encoded_" + img + ".")
-    elif user_inp=="2":
-        coded = input("Input the image that has the hidden message:\n")
+    elif user_input=="2":
+        coded = ""
+
+        # Checks for filenames in the input.
+        if len(sys.argv)>2:
+            coded = sys.argv[2]
+        else:
+            coded = input("Input the image that has the hidden message:\n")
+
         decode(coded)
         print("Your image has been decoded! The new filename is decoded_" + coded + ".")
-    elif user_inp=="3":
-        img = input("Input the file to inspect:\n")
+    elif user_input=="3":
+        img = ""
+
+        # Checks for filenames in the input.
+        if len(sys.argv)>2:
+            img = sys.argv[2]
+        else:
+            img = input("Input the file to inspect:\n")
+
         inspect(img)
-    elif user_inp=="4":
-        img = input("Input the file you want to create a black copy from:\n")
+    elif user_input=="4":
+        img = ""
+
+        # Checks for filenames in the input.
+        if len(sys.argv)>2:
+            img = sys.argv[2]
+        else:
+            img = input("Input the file you want to create a black copy from:\n")
+
         black(img)
         print("Your black image has been created! The new filename is black_" + img + ".")
-    elif user_inp=="5":
+    elif user_input=="5":
         sys.exit()
     else:
         # Lets the user know that's an invalid command.

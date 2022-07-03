@@ -440,7 +440,8 @@ def main():
             print("Your black image has been created at " + new_path_data[1] +
             "! The new filename is black_" + new_path_data[0] + ".")
         else:
-            print("Your black image has been created at! The new filename is black_" + new_path_data[0] + ".")
+            print("Your black image has been created at! The new filename is black_" +
+            new_path_data[0] + ".")
 
     elif user_input=="5":
         sys.exit()

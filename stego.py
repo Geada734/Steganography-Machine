@@ -296,18 +296,9 @@ def validate_format(img):
 
 def validate_image(img):
     '''Validates that the file is a multilayer .png image.'''
-    pix0 = img.getpixel((0, 0))
-
-    if not hasattr(img, "filename"):
-        print("The image object does not have a file name.")
-
-    # Checks if the first pixel is a tuple.
-    if not isinstance(pix0, tuple):
-        # Lets the user know the image is not multi-layer.
-        print("Image is not multi-layer")
-        sys.exit()
-    elif len(pix0)<3:
-        print("Incorrect pixel model")
+    
+    if(img.mode != "RGB" and img.mode != "RGBA"):
+        print("Image is not multi-band")
         sys.exit()
 
 

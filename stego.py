@@ -46,6 +46,7 @@
 import sys
 import os
 from PIL import Image
+from stegonosaurus import stego_functions as sf
 
 def get_path_and_name(filename):
     '''Separates the filename from the path'''
@@ -95,32 +96,22 @@ def make_it_black(img):
 
     return new_path_data
 
-def image_reader(img):
-    '''Generator that reads the whole image to be used in the inspect_image function'''
-    img_data = list(img.getdata())
-    for i in img_data:
-        yield i
-
 def inspect(img_name):
     '''Opens an image to be inspected.'''
     try:
         validate_format(img_name)
+
         img = Image.open(img_name, "r")
+
         validate_image(img)
-        inspect_image(img)
+        print(sf.inspect(img))
+        img.show()
+        sys.exit()
+
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         sys.exit()
-
-def inspect_image(img):
-    '''Inspects the image.'''
-    generator = image_reader(img)
-
-    for i in generator:
-        print(i)
-
-    img.show()
 
 def flatten_code(img_name):
     '''Formats the image containing the message to be used by the app.'''

@@ -104,6 +104,7 @@ def inspect(img_name):
         img = Image.open(img_name, "r")
 
         validate_image(img)
+
         print(sf.inspect(img))
         img.show()
         sys.exit()

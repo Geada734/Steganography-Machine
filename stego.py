@@ -67,34 +67,18 @@ def black(img_name):
         img = Image.open(img_name, "r")
         validate_image(img)
 
-        return make_it_black(img)
+        new_img = sf.blacken(img)
+        new_path_data = get_path_and_name(img.filename)
+
+        new_img.show()
+        new_img.save(new_path_data[1] + "black_" + new_path_data[0])
+
+        return new_path_data
+
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         sys.exit()
-
-def make_it_black(img):
-    '''Creates a black copy of an image.'''
-    pix_x = 0
-    pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
-
-    # Copy of the original image.
-    new_img = img.copy()
-
-    # Iterates each pixel turning it black.
-    for pix_x in range (0, width):
-        for pix_y in range(0, height):
-            new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
-
-    # Saves the image and shows it to the user.
-    new_path_data = get_path_and_name(img.filename)
-
-    new_img.show()
-    new_img.save(new_path_data[1] + "black_" + new_path_data[0])
-
-    return new_path_data
 
 def inspect(img_name):
     '''Opens an image to be inspected.'''
@@ -297,7 +281,6 @@ def validate_format(img):
 
 def validate_image(img):
     '''Validates that the file is a multilayer .png image.'''
-    
     if(img.mode != "RGB" and img.mode != "RGBA"):
         print("Image is not multi-band")
         sys.exit()

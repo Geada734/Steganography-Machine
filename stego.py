@@ -225,7 +225,14 @@ def decode(img_name):
         mode = input("Would you like your message to be released on top of the original image (T)" +
         " or on top of a black background (B)?\n")
         if mode.lower()=="b" or mode.lower()=="t":
-            return decode_image(img, mode)
+            new_img = sf.decode(img, mode)
+            new_path_data = get_path_and_name(img.filename)
+
+            # Saves the image and shows it to the user.
+            new_img.show()
+            new_img.save(new_path_data[1]+"decoded_"+new_path_data[0])
+
+            return new_path_data
         else:
             # Lets the user know the selected mode is not valid.
             print("Invalid mode.")
@@ -235,37 +242,6 @@ def decode(img_name):
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         sys.exit()
-
-def decode_image(img, mode):
-    '''Decodes an image with an encoded message.'''
-    pix_x = 0
-    pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
-
-    # Copy of the original image.
-    new_img = img.copy()
-
-    # Iterate the image to look for odd pixels.
-    for pix_x in range(0, width):
-        for pix_y in range(0, height):
-            pix = img.getpixel((pix_x, pix_y))
-
-            if pix[2]%2==1:
-                # Odd pixels are turned red.
-                new_img.putpixel((pix_x, pix_y), (255, 0, 0, 255))
-            else:
-                # If the mode is "B", even pixels are turned black.
-                if mode.lower()=="b":
-                    new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
-
-    new_path_data = get_path_and_name(img.filename)
-
-    # Saves the image and shows it to the user.
-    new_img.show()
-    new_img.save(new_path_data[1]+"decoded_"+new_path_data[0])
-
-    return new_path_data
 
 def validate_format(img):
     '''Validates that the files provided are .png images.'''

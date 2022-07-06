@@ -112,7 +112,7 @@ def flatten_code(img_name):
         sys.exit()
 
 def flatten_code_image(img):
-    '''Makes the image's balcks extra black.'''
+    '''Makes the image's blacks extra black.'''
     pix_x = 0
     pix_y = 0
     width = img.size[0]

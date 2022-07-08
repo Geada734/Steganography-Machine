@@ -44,7 +44,6 @@
 # -Geada734
 
 import sys
-import os
 from PIL import Image
 from stegonosaurus import stego_functions as sf
 
@@ -98,121 +97,31 @@ def inspect(img_name):
         print("File not found.")
         sys.exit()
 
-def flatten_code(img_name):
-    '''Formats the image containing the message to be used by the app.'''
-    try:
-        validate_format(img_name)
-        img = Image.open(img_name, "r")
-        validate_image(img)
-        flatten_code_image(img)
-
-    except FileNotFoundError:
-        # Lets the user know there's no such file in the current directory.
-        print("File not found.")
-        sys.exit()
-
-def flatten_code_image(img):
-    '''Makes the image's blacks extra black.'''
-    pix_x = 0
-    pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
-
-    # Copy of the orginal image.
-    new_img = img.copy()
-
-    # Iterates over each pixel to make the image usable by turning them black.
-    for pix_x in range(0, width):
-        for pix_y in range(0, height):
-            if img.getpixel((pix_x,pix_y))[0]==0:
-                new_img.putpixel((pix_x, pix_y), (0, 0, 0, 255))
-
-    new_filename = get_path_and_name(img.filename)[0]
-
-    new_img.save("flatCode_"+new_filename)
-
-def flatten(img_name):
-    '''Formats the image where the message will be hidden to be used by the app.'''
-    try:
-        validate_format(img_name)
-        img = Image.open(img_name, "r")
-        validate_image(img)
-        flatten_image(img)
-    except FileNotFoundError:
-        # Lets the user know there's no such file in the current directory.
-        print("File not found.")
-        sys.exit()
-
-def flatten_image(img):
-    '''Makes sure the message can be encoded in the image.'''
-    pix_x = 0
-    pix_y = 0
-    width = img.size[0]
-    height = img.size[1]
-
-    # Copy of the original image.
-    new_img = img.copy()
-
-    # Iterates over each pixel in the image to make their RGB value even.
-    for pix_x in range(0, width):
-        for pix_y in range(0, height):
-            pix = list(img.getpixel((pix_x, pix_y)))
-            red = pix[0]
-            green = pix[1]
-            blue = pix[2]
-
-            # Since blue is the "B" in "RGB", that's the value we are making even.
-            if blue%2==1:
-                blue = blue - 1
-                new_img.putpixel((pix_x, pix_y), (red, green, blue, 255))
-
-    new_filename = get_path_and_name(img.filename)[0]
-
-    new_img.save("flat_"+new_filename)
-
-def encode(coded, img_name, path):
+def encode(coded, img_name):
     '''Opens both images to encode the message.'''
-    coded_img = Image.open(coded)
-    img = Image.open(img_name)
+    try:
+        validate_format(coded)
+        validate_format(img_name)
 
-    validate_image(coded_img)
-    validate_image(img)
-    validate_image_sizes(coded_img, img)
+        coded_img = Image.open(coded)
+        img = Image.open(img_name)
 
-    return encode_images(coded_img, img, path)
+        validate_image(coded_img)
+        validate_image(img)
+        validate_image_sizes(coded_img, img)
 
-def encode_images(coded, img, path):
-    '''Encodes the message inside the other image.'''
-    pix_x = 0
-    pix_y = 0
-    width = coded.size[0]
-    height = coded.size[1]
+        new_img = sf.encode(coded_img, img)
+        new_path_data = get_path_and_name(img_name)
 
-    # Copy of the original image.
-    new_img = img.copy()
+        # Saves the image and shows it to the user.
+        new_img.show()
+        new_img.save(new_path_data[1] + "encoded_" + new_path_data[0])
 
-    # Any red pixels on the black image are turned into odd pixels
-    # on the original picture.
-    for pix_x in range(0, width):
-        for pix_y in range(0, height):
-            if coded.getpixel((pix_x, pix_y))[0]>0:
-                pix = list(img.getpixel((pix_x, pix_y)))
-                pix[2] = pix[2] + 1
-                if len(pix) == 3:
-                    pix.append(255)
-
-                new_img.putpixel((pix_x, pix_y), tuple(pix))
-
-    # Saves the image and shows it to the user.
-    new_img.show()
-    new_img.save(path + "encoded_" + img.filename.split("_")[1])
-    new_img.filename = img.filename.split("_")[1]
-
-    # Remove the flat temporary images used for encoding.
-    os.remove(coded.filename)
-    os.remove(img.filename)
-
-    return str(new_img.filename)
+        return new_path_data
+    except FileNotFoundError:
+        # Lets the user know there's no such file in the current directory.
+        print("File not found.")
+        sys.exit()
 
 def decode(img_name):
     '''Opens an image with an encoded message to be decoded.'''
@@ -317,23 +226,18 @@ def main():
         else:
             img = input("Input the image you want to hide your message in:\n")
 
-        flatten_code(coded)
-        flatten(img)
-
         # Simplifying the name and path of the images to flatten.
         # Can't believe PIL won't differentiate between filename and path.
-        simple_coded = get_path_and_name(coded)
-        simple_img = get_path_and_name(img)
-        new_file_name = encode("flatCode_" + simple_coded[0], "flat_" +
-        simple_img[0], simple_img[1])
+        new_path_data = encode(coded, img)
 
         # Change the message on whether the file is stored at the same
         # dir as the script or not.
-        if len(simple_img[1])>0:
-            print("Your image has been encoded at " + simple_img[1] +
-            "! The new filename is encoded_" + new_file_name + ".")
+        if len(new_path_data[1])>0:
+            print("Your image has been encoded at " + new_path_data[1] +
+            "! The new filename is encoded_" + new_path_data[0] + ".")
         else:
-            print("Your image has been encoded! The new filename is encoded_" + new_file_name + ".")
+            print("Your image has been encoded! The new filename is encoded_" +
+                  new_path_data[0] + ".")
 
     elif user_input=="2":
         coded = ""

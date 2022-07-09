@@ -72,6 +72,9 @@ def black(img_name):
         new_img.show()
         new_img.save(new_path_data[1] + "black_" + new_path_data[0])
 
+        img.close()
+        new_img.close()
+
         return new_path_data
 
     except FileNotFoundError:
@@ -87,9 +90,11 @@ def inspect(img_name):
         img = Image.open(img_name, "r")
 
         validate_image(img)
-
         print(sf.inspect(img))
         img.show()
+
+        img.close()
+
         sys.exit()
 
     except FileNotFoundError:
@@ -117,6 +122,10 @@ def encode(coded, img_name):
         new_img.show()
         new_img.save(new_path_data[1] + "encoded_" + new_path_data[0])
 
+        coded_img.close()
+        img.close()
+        new_img.close()
+
         return new_path_data
     except FileNotFoundError:
         # Lets the user know there's no such file in the current directory.
@@ -140,6 +149,9 @@ def decode(img_name):
             # Saves the image and shows it to the user.
             new_img.show()
             new_img.save(new_path_data[1]+"decoded_"+new_path_data[0])
+
+            img.close()
+            new_img.close()
 
             return new_path_data
         else:
@@ -167,6 +179,7 @@ def validate_format(img):
 def validate_image(img):
     '''Validates that the file is a multilayer .png image.'''
     if(img.mode != "RGB" and img.mode != "RGBA"):
+        img.close()
         print("Image is not multi-band")
         sys.exit()
 
@@ -181,6 +194,9 @@ def validate_image_sizes(coded, img):
     img_y = img.size[1]
 
     if coded_x>img_x or coded_y>img_y:
+        coded.close()
+        img.close()
+
         print("Make sure the image that contains the message is smaller than the template.")
         sys.exit()
 

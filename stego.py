@@ -47,7 +47,7 @@ import sys
 from PIL import Image
 from stegonosaurus import stego_functions as sf
 
-def get_path_and_name(filename):
+def get_path_and_name(filename) -> list:
     '''Separates the filename from the path'''
     path_list = filename.split("/")
     name = path_list.pop()
@@ -59,7 +59,7 @@ def get_path_and_name(filename):
 
     return [name, path]
 
-def black(img_name):
+def black(img_name) -> str:
     '''Opens a file to be turned black.'''
     try:
         validate_format(img_name)
@@ -102,7 +102,7 @@ def inspect(img_name):
         print("File not found.")
         sys.exit()
 
-def encode(coded, img_name):
+def encode(coded, img_name) -> str:
     '''Opens both images to encode the message.'''
     try:
         validate_format(coded)
@@ -132,7 +132,7 @@ def encode(coded, img_name):
         print("File not found.")
         sys.exit()
 
-def decode(img_name):
+def decode(img_name) -> str:
     '''Opens an image with an encoded message to be decoded.'''
     try:
         validate_format(img_name)

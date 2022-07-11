@@ -47,7 +47,7 @@ import sys
 from PIL import Image
 from stegonosaurus import stego_functions as sf
 
-def get_path_and_name(filename) -> list:
+def get_path_and_name(filename: str) -> list:
     '''Separates the filename from the path'''
     path_list = filename.split("/")
     name = path_list.pop()
@@ -59,7 +59,7 @@ def get_path_and_name(filename) -> list:
 
     return [name, path]
 
-def black(img_name) -> str:
+def black(img_name: str) -> str:
     '''Opens a file to be turned black.'''
     try:
         validate_format(img_name)
@@ -82,7 +82,7 @@ def black(img_name) -> str:
         print("File not found.")
         sys.exit()
 
-def inspect(img_name):
+def inspect(img_name: str):
     '''Opens an image to be inspected.'''
     try:
         validate_format(img_name)
@@ -102,7 +102,7 @@ def inspect(img_name):
         print("File not found.")
         sys.exit()
 
-def encode(coded, img_name) -> str:
+def encode(coded: str, img_name: str) -> str:
     '''Opens both images to encode the message.'''
     try:
         validate_format(coded)
@@ -132,7 +132,7 @@ def encode(coded, img_name) -> str:
         print("File not found.")
         sys.exit()
 
-def decode(img_name) -> str:
+def decode(img_name: str) -> str:
     '''Opens an image with an encoded message to be decoded.'''
     try:
         validate_format(img_name)
@@ -164,7 +164,7 @@ def decode(img_name) -> str:
         print("File not found.")
         sys.exit()
 
-def validate_format(img):
+def validate_format(img: str):
     '''Validates that the files provided are .png images.'''
     img_components = img.split(".")
 
@@ -176,7 +176,7 @@ def validate_format(img):
         print("Invalid file format.")
         sys.exit()
 
-def validate_image(img):
+def validate_image(img: Image):
     '''Validates that the file is a multilayer .png image.'''
     if(img.mode != "RGB" and img.mode != "RGBA"):
         img.close()
@@ -184,7 +184,7 @@ def validate_image(img):
         sys.exit()
 
 
-def validate_image_sizes(coded, img):
+def validate_image_sizes(coded: Image, img: Image):
     '''Validates that the image with the coded message is smaller than the template
     image.
     '''

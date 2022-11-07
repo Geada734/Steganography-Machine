@@ -45,7 +45,7 @@
 
 import sys
 from PIL import Image
-from stegonosaurus import stego_functions as sf
+from stegonosaurus import stegofunctions as sf
 
 def get_path_and_name(filename: str) -> list:
     '''Separates the filename from the path'''

@@ -1,6 +1,6 @@
 # Stegonography-Machine
 
-Magical stegonography machine usage:
+Magical steganography machine usage:
 
 This script encodes a message contained in an image inside
 another image using the PIL library for Python.

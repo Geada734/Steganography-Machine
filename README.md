@@ -9,7 +9,6 @@ All submitted images need to be multi-layer PNGs.
 
 Functions:
 
-
 1.- Encode:
 
 Submit two PNG images of the same size, both images most be PNGs.

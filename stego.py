@@ -3,6 +3,7 @@ import sys
 from PIL import Image
 from stegonosaurus import stegofunctions as sf
 
+
 def get_path_and_name(filename: str) -> list:
     '''Separates the filename from the path'''
     path_list = filename.split("/")
@@ -14,6 +15,7 @@ def get_path_and_name(filename: str) -> list:
         path = "/".join(path_list) + "/"
 
     return [name, path]
+
 
 def black(img_name: str) -> str:
     '''Opens a file to be turned black.'''
@@ -38,6 +40,7 @@ def black(img_name: str) -> str:
         print("File not found.")
         sys.exit()
 
+
 def inspect(img_name: str):
     '''Opens an image to be inspected.'''
     try:
@@ -57,6 +60,7 @@ def inspect(img_name: str):
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         sys.exit()
+
 
 def encode(coded: str, img_name: str) -> str:
     '''Opens both images to encode the message.'''
@@ -87,6 +91,7 @@ def encode(coded: str, img_name: str) -> str:
         # Lets the user know there's no such file in the current directory.
         print("File not found.")
         sys.exit()
+
 
 def decode(img_name: str) -> str:
     '''Opens an image with an encoded message to be decoded.'''
@@ -120,6 +125,7 @@ def decode(img_name: str) -> str:
         print("File not found.")
         sys.exit()
 
+
 def validate_format(img: str):
     '''Validates that the files provided are .png images.'''
     img_components = img.split(".")
@@ -131,6 +137,7 @@ def validate_format(img: str):
     else:
         print("Invalid file format.")
         sys.exit()
+
 
 def validate_image(img: Image):
     '''Validates that the file is a multilayer .png image.'''
@@ -155,6 +162,7 @@ def validate_image_sizes(coded: Image, img: Image):
 
         print("Make sure the image that contains the message is smaller than the template.")
         sys.exit()
+
 
 def main():
     '''Main method'''
@@ -266,6 +274,7 @@ def main():
     else:
         # Lets the user know that's an invalid command.
         print("Input a valid command, please.")
+
 
 if __name__ == "__main__":
     main()

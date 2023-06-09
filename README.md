@@ -1,4 +1,4 @@
-# Stegonography-Machine
+# Steganography-Machine
 
 Python CLI Application which showcases [stegonosaurus'](https://pypi.org/project/stegonosaurus/) functions.
 

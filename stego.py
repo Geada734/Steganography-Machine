@@ -169,13 +169,14 @@ def main():
     user_input = ""
     options = {
         "encode": "1",
-        "decode": "2",
-        "inspect": "3",
-        "black": "4"
+        "text_encode": "2",
+        "decode": "3",
+        "inspect": "4",
+        "black": "5"
     }
 
     # Checks if there were any arguments when running the app.
-    if len(sys.argv)>1:
+    if len(sys.argv) > 1:
         try:
             user_input = options[sys.argv[1].lower()]
         except KeyError:
@@ -185,23 +186,23 @@ def main():
         # Prompts the user for imput if not.
         prompt = (input("Welcome to my awesome stenography machine!\n" +
         "Select one of the following:\n" +
-        "1.- Encode\n2.- Decode\n3.- Inspect\n4.- Create black image\n" +
-        "5.- Exit\n"))
+        "1.- Encode\n2.- Text Encode\n3.- Decode\n4.- Inspect\n5.- Create black image\n" +
+        "6.- Exit\n"))
         user_input = prompt
 
     # Acts on user input.
-    if user_input=="1":
+    if user_input == "1":
         coded = ""
 
         # Checks for filenames in the input.
-        if len(sys.argv)>2:
+        if len(sys.argv) > 2:
             coded = sys.argv[2]
         else:
             coded = input("Input the filename of the image containing your message:\n")
 
         img = ""
 
-        if len(sys.argv)>3:
+        if len(sys.argv) > 3:
             img = sys.argv[3]
         else:
             img = input("Input the image you want to hide your message in:\n")
@@ -219,11 +220,14 @@ def main():
             print("Your image has been encoded! The new filename is encoded_" +
                   new_path_data[0] + ".")
 
-    elif user_input=="2":
+    elif user_input == "2":
+        print("Text encode comming soon ;)")
+        sys.exit()
+    elif user_input == "3":
         coded = ""
 
         # Checks for filenames in the input.
-        if len(sys.argv)>2:
+        if len(sys.argv) > 2:
             coded = sys.argv[2]
         else:
             coded = input("Input the image that has the hidden message:\n")
@@ -232,28 +236,28 @@ def main():
 
         # Change the message on whether the file is stored at the same
         # dir as the script or not.
-        if len(new_path_data[1])>0:
+        if len(new_path_data[1]) > 0:
             print("Your image has been decoded at "+ new_path_data[1] +
             "! The new filename is decoded_" + new_path_data[0]+ ".")
         else:
             print("Your image has been decoded! The new filename is decoded_" +
-            new_path_data[0]+ ".")
+            new_path_data[0] + ".")
 
-    elif user_input=="3":
+    elif user_input == "4":
         img = ""
 
         # Checks for filenames in the input.
-        if len(sys.argv)>2:
+        if len(sys.argv) > 2:
             img = sys.argv[2]
         else:
             img = input("Input the file to inspect:\n")
 
         inspect(img)
-    elif user_input=="4":
+    elif user_input == "5":
         img = ""
 
         # Checks for filenames in the input.
-        if len(sys.argv)>2:
+        if len(sys.argv) > 2:
             img = sys.argv[2]
         else:
             img = input("Input the file you want to create a black copy from:\n")
@@ -262,14 +266,14 @@ def main():
 
         # Change the message on whether the file is stored at the same
         # dir as the script or not.
-        if len(new_path_data[1])>0:
+        if len(new_path_data[1]) > 0:
             print("Your black image has been created at " + new_path_data[1] +
             "! The new filename is black_" + new_path_data[0] + ".")
         else:
             print("Your black image has been created at! The new filename is black_" +
             new_path_data[0] + ".")
 
-    elif user_input=="5":
+    elif user_input == "6":
         sys.exit()
     else:
         # Lets the user know that's an invalid command.

@@ -6,7 +6,7 @@ isort==5.10.1
 lazy-object-proxy==1.7.1
 mccabe==0.7.0
 packaging==21.3
-Pillow==9.2.0
+pillow==11.3.0
 Pillow-PIL==0.1.dev0
 platformdirs==2.5.2
 pluggy==1.0.0
@@ -14,6 +14,7 @@ py==1.11.0
 pylint==2.14.4
 pyparsing==3.0.9
 pytest==7.1.2
+setuptools==80.9.0
 stegonosaurus==1.2.3
 tomli==2.0.1
 tomlkit==0.11.0
